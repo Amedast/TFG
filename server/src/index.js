@@ -14,12 +14,14 @@ app.use(cors());
 
 app.use("/auth", userRouter);
 app.use("/", mediaRouter);
+
 // Rutas de ejemplo
 app.get("/", (req, res) => {
 	res.send("¡Hola, mundo!");
 });
 
 mongoose.connect(process.env.MONGOOSE);
+
 // Iniciar el servidor
 app.listen(port, () => {
 	console.log(`Servidor iniciado en http://localhost:${port}`);

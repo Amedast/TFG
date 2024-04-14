@@ -151,7 +151,6 @@ router.post("/checkemail", async (req, res) => {
 router.post("/checkpassword", async (req, res) => {
 	const { password } = req.body;
 
-	// Comprobación de longitud mínima de la contraseña
 	if (password.length < 8) {
 		return res.status(400).json({
 			error: "INVALID_PASSWORD",

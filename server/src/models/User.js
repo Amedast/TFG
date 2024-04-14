@@ -79,14 +79,13 @@ const UserSchema = new mongoose.Schema({
 	},
 });
 
-// Antes de guardar el usuario en la base de datos, hasheamos la contraseña
 UserSchema.pre("save", async function (next) {
 	if (!this.isModified("password")) {
 		return next();
 	}
 
 	try {
-		const hashedPassword = await bcrypt.hash(this.password, 10); // Número de rondas de hash (10 es un valor seguro)
+		const hashedPassword = await bcrypt.hash(this.password, 10);
 		this.password = hashedPassword;
 		next();
 	} catch (error) {
