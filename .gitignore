@@ -1,0 +1,21 @@
+# Ignorar archivos específicos para el frontend
+/client/node_modules
+/client/build
+/client/.env
+
+# Ignorar archivos específicos para el backend
+/server/node_modules
+/server/.env
+/server/build
+
+# Ignorar archivos generados por el sistema operativo o IDE
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos específicos de editor o IDE
+.vscode/
+.idea/
+
+# Ignorar archivos de dependencias específicas del sistema de gestión de paquetes (ejemplo: npm)
+npm-debug.log
+yarn-error.log
