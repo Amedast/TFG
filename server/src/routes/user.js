@@ -158,13 +158,13 @@ router.post("/checkpassword", async (req, res) => {
 		});
 	}
 
-	const containsNumber = /\d/.test(password);
+	/*const containsNumber = /\d/.test(password);
 	if (!containsNumber) {
 		return res.status(400).json({
 			error: "INVALID_PASSWORD",
 			message: "La contraseña debe contener al menos un número",
 		});
-	}
+	}*/
 
 	res.status(200).json({ message: "La contraseña es válida" });
 });
