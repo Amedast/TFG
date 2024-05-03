@@ -20,7 +20,7 @@ router.get("/medialist", async (req, res) => {
 
 	try {
 		const response = await fetch(url, options).then((res) => res.json());
-		res.status(200).json(options);
+		res.status(200).json(response);
 	} catch (error) {
 		res
 			.status(500)
