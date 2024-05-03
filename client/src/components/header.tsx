@@ -7,10 +7,21 @@ import ProfileAvatar from './header/profileAvatar'
 
 export default function Header () {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     setIsLoggedIn(!!token)
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   const logout = () => {
@@ -19,7 +30,13 @@ export default function Header () {
   }
 
   return (
-    <div className='bg-black/60 text-neutral-100 p-5 hidden  lg:flex gap-[3rem]   fixed w-full items-center z-50 backdrop-blur-sm px-[5rem]'>
+    <div
+      className={`${
+        isScrolled
+          ? 'bg-background border-b border-secondary'
+          : 'bg-background/60 backdrop-blur-sm'
+      } text-neutral-100 p-5 hidden lg:flex gap-[3rem] fixed w-full items-center z-50 transition-colors duration-300 px-[5rem]`}
+    >
       <div className='flex gap-[3rem]'>
         <Link href={'/'}>
           <div className='logo text-5xl w-fit flex '>

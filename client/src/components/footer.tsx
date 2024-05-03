@@ -1,23 +1,7 @@
-import { Separator } from '@/components/ui/separator'
 export default function Footer () {
   return (
-    <div className='bg-primary text-neutral-100 px-5 py-[5rem] w-full mt-[5rem]'>
-      <div className='flex justify-around items-center text-lg w-[60%] mx-auto'>
-        <label className='hover:underline transition duration-200 cursor-pointer'>
-          Inicio
-        </label>
-        <label className='hover:underline transition duration-200 cursor-pointer'>
-          Películas
-        </label>
-        <label className='hover:underline transition duration-200 cursor-pointer'>
-          Series
-        </label>
-        <label className='hover:underline transition duration-200 cursor-pointer'>
-          Descubre
-        </label>
-      </div>
-      <Separator className='my-[3rem] w-[60%] mx-auto bg-neutral-300' />
-      <div className='flex justify-around items-center w-[40%] mx-auto'>
+    <div className='bg-primary text-neutral-100 px-5 py-[3rem] w-full mt-[5rem]'>
+      <div className='flex justify-around items-center w-[30%] mx-auto'>
         <div className='rounded-full bg-background p-2'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
