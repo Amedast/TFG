@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { userRouter } from "./routes/user.js";
 import { mediaRouter } from "./routes/mediaList.js";
+import { tmdbRouter } from "./routes/tmdb.js";
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 
 app.use("/auth", userRouter);
 app.use("/", mediaRouter);
+app.use("/api", tmdbRouter);
 
 // Rutas de ejemplo
 app.get("/", (req, res) => {

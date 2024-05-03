@@ -16,9 +16,7 @@ router.post("/register", async (req, res) => {
 	try {
 		const { username, password, email } = req.body;
 
-		const usernameLowerCase = username.toLowerCase();
-
-		const user = await UserModel.findOne({ username: usernameLowerCase });
+		const user = await UserModel.findOne({ username: username });
 
 		if (user) {
 			return res.status(400).json({
@@ -85,7 +83,7 @@ router.post("/register", async (req, res) => {
 function generateToken(userId) {
 	const secret = secretToken;
 	const payload = { userId };
-	const options = { expiresIn: "1d" };
+	const options = { expiresIn: "1y" };
 	const token = jwt.sign(payload, secret, options);
 	return token;
 }
@@ -100,9 +98,19 @@ router.post("/login", async (req, res) => {
 	if (!user) {
 		return res.json({
 			error: "USER_NOT_FOUND",
-			message: "Usuario no encontrado",
+			message: "Email o contraseña incorrectos.",
 		});
 	}
+
+	const isPasswordValid = await bcrypt.compare(password, user.password);
+
+	if (!isPasswordValid) {
+		return res.json({
+			error: "USER_NOT_FOUND",
+			message: "Email o contraseña incorrectos.",
+		});
+	}
+
 	if (!user.emailVerified) {
 		return res.json({
 			error: "EMAIL_NOT_VERIFIED",
@@ -111,62 +119,75 @@ router.post("/login", async (req, res) => {
 		});
 	}
 
-	const isPasswordValid = await bcrypt.compare(password, user.password);
-
-	if (!isPasswordValid) {
-		return res.json({
-			error: "PASS_NOT_CORRECT",
-			message: "La contraseña introducida no es correcta",
-		});
-	}
-
 	const token = jwt.sign({ id: user._id }, "secret");
-	res.json({ token, userID: user._id });
+	res.json({ token });
 });
 
-router.post("/checkuser", async (req, res) => {
-	const { username } = req.body;
-
+router.get("/checkuser/:username", async (req, res) => {
+	const username = req.params.username;
+	let errors = [];
 	const user = await UserModel.findOne({ username: username });
 
-	if (!user) {
-		return res.json({ value: true });
+	if (user) {
+		errors.push("Este usuario ya ha sido registrado.");
+	}
+
+	if (errors.length > 0) {
+		return res.json({
+			value: false,
+			errors: errors,
+		});
 	} else {
-		return res.json({ value: false });
+		res.json({ value: true });
 	}
 });
 
-router.post("/checkemail", async (req, res) => {
-	const { email } = req.body;
+router.get("/checkemail/:email", async (req, res) => {
+	const email = req.params.email;
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	let errors = [];
+
+	if (!emailRegex.test(email) && email != "") {
+		errors.push("Formato incorrecto.");
+	}
 
 	const check = await UserModel.findOne({ email: email });
 
-	if (!check) {
-		return res.json({ value: true });
+	if (check) {
+		errors.push("Este email ya ha sido registrado.");
+	}
+
+	if (errors.length > 0) {
+		return res.json({
+			value: false,
+			errors: errors,
+		});
 	} else {
-		return res.json({ value: false });
+		res.json({ value: true });
 	}
 });
 
-router.post("/checkpassword", async (req, res) => {
-	const { password } = req.body;
-
+router.get("/checkpassword/:password", async (req, res) => {
+	const password = req.params.password;
+	let errors = [];
 	if (password.length < 8) {
-		return res.status(400).json({
-			error: "INVALID_PASSWORD",
-			message: "La contraseña debe tener al menos 8 caracteres",
-		});
+		errors.push("La contraseña debe tener al menos 8 caracteres.");
 	}
 
-	/*const containsNumber = /\d/.test(password);
+	const containsNumber = /\d/.test(password);
 	if (!containsNumber) {
-		return res.status(400).json({
-			error: "INVALID_PASSWORD",
-			message: "La contraseña debe contener al menos un número",
-		});
-	}*/
+		errors.push("La contraseña debe contener al menos un número.");
+	}
 
-	res.status(200).json({ message: "La contraseña es válida" });
+	if (errors.length > 0 && password.length > 0) {
+		return res.json({
+			value: false,
+			errors: errors,
+		});
+	} else {
+		res.json({ value: true });
+	}
 });
 
 const verifyToken = (token) => {
@@ -191,13 +212,21 @@ router.get("/verify/:token", async (req, res) => {
 			{ new: true }
 		);
 		if (user) {
-			res.redirect(process.env.CLIENT_URL + "/auth");
+			res.redirect(process.env.CLIENT_URL + "/login");
 		} else {
 			res.status(400).send("El token de verificación no es válido.");
 		}
 	} else {
 		res.status(400).send("El token de verificación no es válido.");
 	}
+});
+
+router.get("/getuserid/:token", async (req, res) => {
+	const token = req.params.token;
+	const decodedToken = Buffer.from(token, "base64").toString("utf-8");
+	const userId = verifyToken(decodedToken);
+
+	res.json({ userId });
 });
 
 export { router as userRouter };
