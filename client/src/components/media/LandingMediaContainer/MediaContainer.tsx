@@ -15,7 +15,7 @@ export default async function MediaContainer ({
       </h3>
       <div className='flex flex-wrap justify-around gap-5'>
         {sortTypes.map((sortType: SortType) => (
-          <MediaContainerList sortType={sortType} type={type} />
+          <MediaContainerList sortType={sortType} type={type} key={sortType} />
         ))}
       </div>
     </div>
