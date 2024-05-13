@@ -1,8 +1,13 @@
 import axios, { AxiosResponse } from 'axios'
-import { MediaType, SortType, MediaCardType } from '@/types/media'
-import dotenv from 'dotenv'
-dotenv.config()
-const apiBase = process.env.PUBLIC_API_URL
+import {
+  MediaType,
+  SortType,
+  MediaCardType,
+  MovieDetailsType,
+  TVShowDetailsType,
+  PersonDetailsType
+} from '@/types/media'
+import { apiBase } from '@/lib/exports'
 
 import axiosRetry from 'axios-retry'
 
@@ -57,6 +62,48 @@ export const apiGetTrendingMediaList = async (): Promise<
     return res
   } catch (error) {
     console.error('Error al obtener la lista de medios en tendencia:', error)
+    throw error
+  }
+}
+
+export const apiGetMovieDetails = async (
+  id: number
+): Promise<AxiosResponse<MovieDetailsType>> => {
+  try {
+    const res = await axios.get<MovieDetailsType>(
+      `${apiBase}/api/mediadetails?id=${id}&type=movie`
+    )
+    return res
+  } catch (error) {
+    console.error('Error al obtener los detalles de la pelicula: ', error)
+    throw error
+  }
+}
+
+export const apiGetTVShowDetails = async (
+  id: number
+): Promise<AxiosResponse<TVShowDetailsType>> => {
+  try {
+    const res = await axios.get<TVShowDetailsType>(
+      `${apiBase}/api/mediadetails?id=${id}&type=tv`
+    )
+    return res
+  } catch (error) {
+    console.error('Error al obtener los detalles de la serie:', error)
+    throw error
+  }
+}
+
+export const apiGetPersonDetails = async (
+  id: number
+): Promise<AxiosResponse<PersonDetailsType>> => {
+  try {
+    const res = await axios.get<PersonDetailsType>(
+      `${apiBase}/api/mediadetails?id=${id}&type=person`
+    )
+    return res
+  } catch (error) {
+    console.error('Error al obtener los detalles de la persona:', error)
     throw error
   }
 }

@@ -4,7 +4,7 @@ export type CheckResponse = {
 }
 
 export type LoginResponse = {
-  token: string
+  encodedToken: string
   error?: string
   message?: string
 }

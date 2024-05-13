@@ -1,8 +1,18 @@
-import { SortType, MediaType } from '@/types/media'
+import { SortType, MediaType, Genre } from '@/types/media'
 
-export const getImagePath = (originalSize?: boolean, path?: string) => {
+export const getImagePath = (
+  originalSize?: boolean,
+  path?: string,
+  specificSize?: number
+) => {
   return path
-    ? `https://image.tmdb.org/t/p/${originalSize ? 'original' : 'w500'}/${path}`
+    ? `https://image.tmdb.org/t/p/${
+        originalSize
+          ? 'original'
+          : specificSize
+          ? 'w' + specificSize.toString()
+          : 'w500'
+      }/${path}`
     : '/ImagePlaceholder.png'
 }
 
@@ -47,4 +57,26 @@ export const getCarouselTitle = (
         ? 'En Emisión'
         : 'En Tendecias'
   }
+}
+export const parseTime = (minutes: number) => {
+  const hours = Math.floor(minutes / 60)
+  const remainingMinutes = minutes % 60
+
+  const hoursText = `${hours} h`
+  const minutesText = `${remainingMinutes} m`
+
+  if (hours > 0 && remainingMinutes > 0) {
+    return `${hoursText} ${minutesText}`
+  } else if (hours > 0) {
+    return hoursText
+  } else {
+    return minutesText
+  }
+}
+
+export const getGenresArray = (genres: Genre[]) => {
+  let result:string[] = []
+  genres.forEach((gen) => {
+    result.push(gen.name)
+  })
 }

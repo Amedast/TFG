@@ -83,7 +83,7 @@ router.post("/register", async (req, res) => {
 function generateToken(userId) {
 	const secret = secretToken;
 	const payload = { userId };
-	const options = { expiresIn: "1y" };
+	const options = { expiresIn: "1d" };
 	const token = jwt.sign(payload, secret, options);
 	return token;
 }
@@ -119,8 +119,9 @@ router.post("/login", async (req, res) => {
 		});
 	}
 
-	const token = jwt.sign({ id: user._id }, "secret");
-	res.json({ token });
+	const token = generateToken(user._id);
+	const encodedToken = Buffer.from(token).toString("base64");
+	res.json({ encodedToken });
 });
 
 router.get("/checkuser/:username", async (req, res) => {
@@ -226,7 +227,7 @@ router.get("/getuserid/:token", async (req, res) => {
 	const decodedToken = Buffer.from(token, "base64").toString("utf-8");
 	const userId = verifyToken(decodedToken);
 
-	res.json({ userId });
+	res.json(userId);
 });
 
 export { router as userRouter };

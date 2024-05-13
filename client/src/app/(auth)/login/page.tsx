@@ -22,7 +22,7 @@ export default function Login () {
       ) {
         setError(loginResponse.data.message as string)
       } else {
-        localStorage.setItem('token', loginResponse.data.token)
+        localStorage.setItem('token', loginResponse.data.encodedToken)
         location.replace('/')
       }
     } catch (err) {

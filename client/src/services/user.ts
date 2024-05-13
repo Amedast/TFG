@@ -1,8 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { LoginResponse, CheckResponse, RegisterResponse } from '@/types/user'
-
-// Define la URL base de la API
-const apiBase = process.env.NEXT_PUBLIC_API_URL
+import { apiBase } from '@/lib/exports'
 
 // Login
 export const apiLogin = (
@@ -47,4 +45,8 @@ export const apiCheckPassword = (
   password: string
 ): Promise<AxiosResponse<CheckResponse>> => {
   return axios.get<CheckResponse>(`${apiBase}/auth/checkpassword/${password}`)
+}
+
+export const apiGetUserId = (token: string): Promise<AxiosResponse<string>> => {
+  return axios.get<string>(`${apiBase}/auth/getuserid/${token}`)
 }

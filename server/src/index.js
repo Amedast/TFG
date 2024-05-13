@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/auth", userRouter);
-app.use("/", mediaRouter);
+app.use("/list", mediaRouter);
 app.use("/api", tmdbRouter);
 
 // Rutas de ejemplo

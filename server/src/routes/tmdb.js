@@ -61,7 +61,15 @@ router.get("/trendinglist", async (req, res) => {
 router.get("/mediadetails", async (req, res) => {
 	const { type, id } = req.query;
 	const url =
-		"https://api.themoviedb.org/3/" + type + "/" + id + "?language=es-ES";
+		"https://api.themoviedb.org/3/" +
+		type +
+		"/" +
+		id +
+		"?language=es-ES&append_to_response=videos,credits,recommendations,similar,movie_credits,tv_credits";
+	const imagesUrl =
+		"https://api.themoviedb.org/3/" + type + "/" + id + "/images";
+	const videosUrl =
+		"https://api.themoviedb.org/3/" + type + "/" + id + "/videos";
 	const options = {
 		headers: {
 			Accept: "application/json",
@@ -71,6 +79,8 @@ router.get("/mediadetails", async (req, res) => {
 
 	try {
 		const response = await fetch(url, options).then((res) => res.json());
+		response.images = await fetch(imagesUrl, options).then((res) => res.json());
+		response.videos = await fetch(videosUrl, options).then((res) => res.json());
 		res.status(200).json(response);
 	} catch (error) {
 		res

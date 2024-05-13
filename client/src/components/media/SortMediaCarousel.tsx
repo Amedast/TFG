@@ -9,7 +9,7 @@ import {
 import MediaCard from './MediaCard'
 import { apiGetMediaList } from '@/services/media'
 import { getCarouselTitle } from '@/lib/functions'
-export default async function MediaCarousel ({
+export default async function SortMediaCarousel ({
   type,
   sortType
 }: {

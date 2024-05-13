@@ -13,7 +13,7 @@ export default async function MediaContainerList ({
   const results = apiResponse.data.results
   return (
     <div className='w-full sm:w-[48%] lg:w-full xl:w-[48%] mt-5'>
-      <h4 className='text-xl text-center text-neutral-200'>
+      <h4 className='text-xl text-center font-semibold text-primary'>
         {getCarouselTitle(type, sortType).sort_type}
       </h4>
       <div className='flex flex-1 flex-col gap-5 mt-5 '>

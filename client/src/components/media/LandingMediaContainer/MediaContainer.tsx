@@ -10,7 +10,7 @@ export default async function MediaContainer ({
 }) {
   return (
     <div className='border border-secondary w-full lg:w-[48%] rounded-sm p-5'>
-      <h3 className='text-xl font-bold text-center'>
+      <h3 className='text-xl font-bold text-center '>
         {type == 'tv' ? 'Series' : 'Películas'}
       </h3>
       <div className='flex flex-wrap justify-around gap-5'>

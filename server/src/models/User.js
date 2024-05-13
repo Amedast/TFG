@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 const ListItemSchema = new mongoose.Schema({
 	content: {
 		contentId: {
-			type: String,
+			type: Number,
 			required: true,
 		},
 		name: {
@@ -12,16 +12,15 @@ const ListItemSchema = new mongoose.Schema({
 			required: true,
 		},
 		genres: {
-			type: [String],
+			type: [{ name: { type: String }, id: { type: Number } }],
 			required: true,
 		},
 		image: {
 			type: String,
 			required: true,
 		},
-		type: {
-			// 0 - Película | 1 - Serie
-			type: Number,
+		mediaType: {
+			type: String,
 			required: true,
 		},
 		episodes: {
@@ -29,16 +28,14 @@ const ListItemSchema = new mongoose.Schema({
 		},
 	},
 	status: {
-		// 0 - Planeado | 1 - En curso | 2 - Completado
 		type: Number,
 		required: true,
 		default: 0,
 	},
-	score: {
+	rating: {
 		type: Number,
 	},
 	progress: {
-		// Campo único de series para llevar cuenta de los episodios
 		type: Number,
 	},
 	startDate: {
@@ -49,6 +46,55 @@ const ListItemSchema = new mongoose.Schema({
 	},
 	notes: {
 		type: String,
+	},
+	timeWatched: {
+		type: Number,
+		required: true,
+	},
+});
+
+const ListSchema = new mongoose.Schema({
+	data: {
+		series: {
+			amount: {
+				type: Number,
+				default: 0,
+			},
+			time: {
+				type: Number,
+				default: 0,
+			},
+			rating: {
+				type: Number,
+				default: 0,
+			},
+		},
+		movies: {
+			amount: {
+				type: Number,
+				default: 0,
+			},
+			time: {
+				type: Number,
+				default: 0,
+			},
+			rating: {
+				type: Number,
+				default: 0,
+			},
+		},
+		genres: {
+			type: [
+				{
+					genre: { type: { name: { type: String }, id: { type: Number } } },
+					quantity: Number,
+				},
+			],
+		},
+	},
+	list: {
+		type: [ListItemSchema],
+		default: [],
 	},
 });
 
@@ -74,8 +120,8 @@ const UserSchema = new mongoose.Schema({
 	},
 	verificationToken: { type: String, default: null },
 	mediaList: {
-		type: [ListItemSchema],
-		default: [],
+		type: ListSchema,
+		default: { data: { series: {}, movies: {}, genres: [] }, list: [] },
 	},
 });
 
