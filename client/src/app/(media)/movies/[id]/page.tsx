@@ -6,7 +6,7 @@ import ImageCarousel from '../../components/ImageCarousel'
 import VideoCarousel from '../../components/VideoCarousel'
 import CastCarousel from '../../components/CastCarousel'
 import { Genre, MediaDetailsType, SpokenLanguage } from '@/types/media'
-import AddToList from '../../components/AddToList'
+import ListButton from '../../components/ListButton'
 
 export const generateMetadata = async ({
   params
@@ -67,7 +67,7 @@ export default async function MovieDetails ({
       </div>
       <div className='container mx-auto mt-10 w-full flex flex-wrap xl:flex-nowrap gap-10'>
         <div className=' w-full xl:w-[19.4%] '>
-          <AddToList media={movie as MediaDetailsType} type='movie' />
+          <ListButton media={movie as MediaDetailsType} type='movie' />
           <div className='border border-secondary mt-3 rounded-sm p-3 flex flex-col flex-1 gap-5'>
             <div>
               <p className='font-semibold'>Valoración</p>

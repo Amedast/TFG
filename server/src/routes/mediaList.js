@@ -20,20 +20,26 @@ router.post("/add", async (req, res) => {
 			user.mediaList.data.series.amount = user.mediaList.data.series.amount + 1;
 			user.mediaList.data.series.time =
 				user.mediaList.data.series.time + item.timeWatched;
-			user.mediaList.data.series.rating =
-				(user.mediaList.data.series.rating * user.mediaList.data.series.amount -
-					1 +
-					item.rating) /
-				user.mediaList.data.series.amount;
+			if (item.rating != undefined) {
+				user.mediaList.data.series.rating =
+					item.rating(
+						user.mediaList.data.series.rating *
+							user.mediaList.data.series.amount -
+							1 +
+							item.rating
+					) / user.mediaList.data.series.amount;
+			}
 		} else {
 			user.mediaList.data.movies.amount = user.mediaList.data.movies.amount + 1;
 			user.mediaList.data.movies.time =
 				user.mediaList.data.movies.time + item.timeWatched;
-			user.mediaList.data.movies.rating =
-				(user.mediaList.data.movies.rating *
-					(user.mediaList.data.movies.amount - 1) +
-					item.rating) /
-				user.mediaList.data.movies.amount;
+			if (item.rating != undefined) {
+				user.mediaList.data.movies.rating =
+					(user.mediaList.data.movies.rating *
+						(user.mediaList.data.movies.amount - 1) +
+						item.rating) /
+					user.mediaList.data.movies.amount;
+			}
 		}
 
 		let newGenres = [];
@@ -168,4 +174,64 @@ router.get("/check/:userId/:contentId", async (req, res) => {
 	}
 });
 
+router.get("/get/:userId", async (req, res) => {
+	try {
+		const userId = req.params.userId;
+		const page = parseInt(req.query.page) || 1;
+		const limit = parseInt(req.query.limit) || 10;
+		const { name, status, types, rating } = req.query;
+
+		const user = await UserModel.findById(userId);
+
+		if (!user) {
+			return res.status(404).json({
+				error: "USER_NOT_FOUND",
+				message: "Usuario no encontrado",
+			});
+		}
+
+		let filteredList = user.mediaList.list;
+
+		if (name) {
+			filteredList = filteredList.filter((item) =>
+				item.content.name.includes(name)
+			);
+		}
+
+		if (status) {
+			filteredList = filteredList.filter((item) =>
+				status.includes(item.status.toString())
+			);
+		}
+
+		if (types) {
+			filteredList = filteredList.filter((item) =>
+				types.includes(item.content.mediaType)
+			);
+		}
+
+		if (rating) {
+			filteredList = filteredList.filter((item) =>
+				item.rating ? item.rating.toString() >= rating : false
+			);
+		}
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = page * limit;
+
+		const paginatedList = filteredList.slice(startIndex, endIndex);
+
+		res.status(200).json({
+			message: "Lista multimedia del usuario obtenida correctamente",
+			mediaList: {
+				data: user.mediaList.data,
+				list: paginatedList,
+			},
+			currentPage: page,
+			totalPages: Math.ceil(filteredList.length / limit),
+		});
+	} catch (error) {
+		res.status(500).json({ error: "SERVER_ERROR", message: error.message });
+	}
+});
 export { router as mediaRouter };

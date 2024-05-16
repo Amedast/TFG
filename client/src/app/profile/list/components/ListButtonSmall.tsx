@@ -7,12 +7,16 @@ import { apiCheckListItem } from '@/services/mediaList'
 import ListMenu from '@/components/list/listMenu'
 import { ListItem } from '@/types/mediaList'
 
-export default function AddToList ({
+export default function ListButton ({
   media,
-  type
+  type,
+  updateList,
+  removeFromList
 }: {
   media: MediaDetailsType
   type: MediaType
+  updateList: (it: ListItem) => void
+  removeFromList: (id: number) => void
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLogged, setIsLogged] = useState(false)
@@ -37,6 +41,10 @@ export default function AddToList ({
     checkList()
   }, [isLogged])
 
+  useEffect(() => {
+    if (contentInList != undefined) updateList(contentInList)
+  }, [contentInList])
+
   const openModal = async () => {
     if (isLogged) {
       const token = localStorage.getItem('token') as string
@@ -55,27 +63,34 @@ export default function AddToList ({
 
   return (
     <>
-      <div className='pt-[8.3rem]'>
-        {isInList ? (
-          <Button
-            className='text-xl font-semibold w-full rounded-sm'
-            variant={'outlinePrimary'}
-            onClick={openModal}
-          >
-            Editar
-          </Button>
-        ) : (
-          <Button
-            className='text-xl font-semibold w-full rounded-sm'
-            onClick={openModal}
-          >
-            Añadir a la lista
-          </Button>
-        )}
+      <div
+        onClick={openModal}
+        className='p-1  w-fit rounded-sm cursor-pointer transition duration-200  hover:bg-primary opacity-0 group-hover:opacity-100 '
+      >
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          className='icon icon-tabler icon-tabler-edit '
+          width='25'
+          height='25'
+          viewBox='0 0 24 24'
+          strokeWidth='1.5'
+          stroke='#ffffff'
+          fill='none'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+        >
+          <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+          <path d='M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1' />
+          <path d='M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z' />
+          <path d='M16 5l3 3' />
+        </svg>
       </div>
       {isModalOpen && (
         <ListMenu
           setIsModalOpen={setIsModalOpen}
+          setIsInList={setIsInList}
+          setContentInList={setContentInList}
+          removeFromList={removeFromList}
           isInList={isInList}
           media={media}
           type={type}

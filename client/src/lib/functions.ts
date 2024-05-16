@@ -1,4 +1,5 @@
-import { SortType, MediaType, Genre } from '@/types/media'
+import { SortType, MediaType, Genre, MediaDetailsType } from '@/types/media'
+import { ListItem } from '@/types/mediaList'
 
 export const getImagePath = (
   originalSize?: boolean,
@@ -16,8 +17,10 @@ export const getImagePath = (
     : '/ImagePlaceholder.png'
 }
 
-export const getMediaType = (media_type: string) => {
-  return media_type == 'tv' ? 'Series' : 'Películas'
+export const getMediaType = (media_type: string, singular?: boolean) => {
+  let result = media_type == 'tv' ? 'Series' : 'Películas'
+  if (singular) result = result.substring(0, result.length - 1)
+  return result
 }
 
 export const getUrlByType = (media_type: string) => {
@@ -74,9 +77,79 @@ export const parseTime = (minutes: number) => {
   }
 }
 
+export const parseTypeToText = (type: number) => {
+  switch (type) {
+    case 0:
+      return 'Planeado'
+    case 1:
+      return 'En Curso'
+    case 2:
+      return 'Completado'
+  }
+}
+
 export const getGenresArray = (genres: Genre[]) => {
-  let result:string[] = []
-  genres.forEach((gen) => {
+  let result: string[] = []
+  genres.forEach(gen => {
     result.push(gen.name)
   })
+}
+
+export const parseDate = (date: Date) => {
+  const javaData = new Date(date.toString())
+
+  return (
+    javaData.getDate() +
+    '-' +
+    javaData.getMonth() +
+    '-' +
+    javaData.getFullYear()
+  ).toString()
+}
+
+export const parseItemToMedia = (item: ListItem) => {
+  let media: MediaDetailsType = {
+    adult: false,
+    backdrop_path: item.content.background,
+    budget: 0,
+    genres: item.content.genres,
+    homepage: '',
+    id: item.content.contentId,
+    imdb_id: '',
+    overview: '',
+    poster_path: item.content.poster,
+    release_date: '',
+    first_air_date: '',
+    revenue: 0,
+    runtime: item.content.runtime,
+    spoken_languages: [],
+    status: '',
+    title: item.content.name,
+    vote_average: 0,
+    videos: {
+      results: []
+    },
+    credits: {
+      crew: [],
+      cast: []
+    },
+    recommendations: {
+      results: []
+    },
+    similar: {
+      results: []
+    },
+    images: {
+      backdrops: [],
+      logos: [],
+      posters: [],
+      profiles: []
+    },
+    episode_run_time: [item.content.runtime],
+    name: item.content.name,
+    number_of_episodes: item.content.episodes,
+    number_of_seasons: 0,
+    seasons: []
+  }
+  return media
 }

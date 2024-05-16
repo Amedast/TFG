@@ -47,6 +47,12 @@ export const apiCheckPassword = (
   return axios.get<CheckResponse>(`${apiBase}/auth/checkpassword/${password}`)
 }
 
-export const apiGetUserId = (token: string): Promise<AxiosResponse<string>> => {
+export const apiGetUserId = (
+  token?: string
+): Promise<AxiosResponse<string>> => {
+  if (token == undefined) {
+    const token = localStorage.getItem('token')
+  }
+
   return axios.get<string>(`${apiBase}/auth/getuserid/${token}`)
 }

@@ -7,6 +7,17 @@ import { es } from 'date-fns/locale'
 import { MediaType, MediaDetailsType } from '@/types/media'
 import Image from 'next/image'
 import { getImagePath } from '@/lib/functions'
+import { useToast } from '@/components/ui/use-toast'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose
+} from '@/components/ui/dialog'
 
 import {
   Select,
@@ -30,11 +41,15 @@ import { apiGetUserId } from '@/services/user'
 import {
   apiAddToList,
   apiCheckListItem,
+  apiDeleteFromList,
   apiEditListItem
 } from '@/services/mediaList'
 
 interface Props {
   setIsModalOpen: (isOpen: boolean) => void
+  setIsInList: (onList: boolean) => void
+  setContentInList: (cont: ListItem | undefined) => void
+  removeFromList?: (id: number) => void
   isInList: boolean
   media: MediaDetailsType
   type: MediaType
@@ -43,11 +58,15 @@ interface Props {
 
 export default function ListMenu ({
   setIsModalOpen,
+  setIsInList,
+  setContentInList,
+  removeFromList,
   isInList,
   media,
   type,
   content
 }: Props) {
+  const { toast } = useToast()
   const [status, setStatus] = useState<string | undefined>(
     isInList && content ? content.status.toString() : undefined
   )
@@ -81,42 +100,164 @@ export default function ListMenu ({
     }
   }, [status])
 
-  async function SaveList () {
-    if (status != null) {
-      let item: ListItem = {
-        content: {
-          contentId: media.id,
-          name: type == 'movie' ? media.title : media.name,
-          genres: media.genres,
-          image: media.poster_path,
-          mediaType: type,
-          episodes: type == 'movie' ? 1 : media.number_of_episodes
-        },
-        status: parseInt(status),
-        timeWatched: 0,
-        startDate: startDate || undefined,
-        endDate: endDate || undefined,
-        notes: notes || ''
-      }
-      if (rating != undefined) item.rating = rating
-      if (progress != undefined) {
-        item.progress = progress
-        item.timeWatched =
-          type == 'movie'
-            ? media.runtime * progress
-            : media.episode_run_time.length == 0
-            ? 20 * progress
-            : media.episode_run_time[0] * progress
-      }
-
-      const token = localStorage.getItem('token') as string
-      const userId = await apiGetUserId(token)
-      if (isInList) {
-        const res = await apiEditListItem(userId.data, media.id, item)
-      } else {
-        const res = await apiAddToList(userId.data, item)
-      }
+  async function saveList () {
+    if (status === undefined) {
+      showToast({
+        title: 'Error',
+        description: 'El campo Estado no puede estar vacío',
+        variant: 'destructive'
+      })
+      return
     }
+
+    if (rating && rating > 10) {
+      showToast({
+        title: 'Error',
+        description: 'La valoración no puede ser mayor que 10.',
+        variant: 'destructive'
+      })
+      return
+    }
+
+    if (
+      progress &&
+      progress > (type === 'movie' ? 1 : media.number_of_episodes)
+    ) {
+      showToast({
+        title: 'Error',
+        description:
+          'El progreso no puede ser mayor que el número máximo de episodios.',
+        variant: 'destructive'
+      })
+      return
+    }
+
+    let item: ListItem = {
+      content: {
+        contentId: media.id,
+        name: type == 'movie' ? media.title : media.name,
+        genres: media.genres,
+        poster: media.poster_path,
+        background: media.backdrop_path,
+        mediaType: type,
+        episodes: type == 'movie' ? 1 : media.number_of_episodes,
+        runtime:
+          type == 'movie'
+            ? media.runtime
+            : media.episode_run_time.length == 0
+            ? 20
+            : media.episode_run_time[0]
+      },
+      status: parseInt(status),
+      timeWatched: 0,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      notes: notes || '',
+      progress: 0
+    }
+    if (rating != undefined) item.rating = rating
+    if (progress != undefined) {
+      item.progress = progress
+      item.timeWatched =
+        type == 'movie'
+          ? media.runtime * progress
+          : media.episode_run_time.length == 0
+          ? 20 * progress
+          : media.episode_run_time[0] * progress
+    }
+
+    const token = localStorage.getItem('token') as string
+    const userId = await apiGetUserId(token)
+    if (isInList) {
+      try {
+        const res = await apiEditListItem(userId.data, media.id, item)
+        if (res.data.error) {
+          showToast({
+            title: 'Error',
+            description: 'Se ha producido un error al añadir el contenido',
+            variant: 'destructive'
+          })
+        } else {
+          showToast({
+            title: 'Contenido editado correctamente',
+            description: res.data.message,
+            variant: 'correct'
+          })
+          setContentInList(item)
+        }
+      } catch (error) {
+        showToast({
+          title: 'Error',
+          description: 'Se ha producido un error al editar el contenido',
+          variant: 'destructive'
+        })
+      }
+      closeModal()
+    } else {
+      try {
+        const res = await apiAddToList(userId.data, item)
+        if (res.data.error) {
+          showToast({
+            title: 'Error',
+            description: 'Se ha producido un error al añadir el contenido',
+            variant: 'destructive'
+          })
+        } else {
+          showToast({
+            title: 'Contenido añadido correctamente',
+            description: res.data.message,
+            variant: 'correct'
+          })
+          setIsInList(true)
+          setContentInList(item)
+        }
+      } catch (error) {
+        showToast({
+          title: 'Error',
+          description: 'Se ha producido un error al añadir el contenido',
+          variant: 'destructive'
+        })
+      }
+      closeModal()
+    }
+  }
+  async function removeItem () {
+    const token = localStorage.getItem('token') as string
+    const userId = await apiGetUserId(token)
+    try {
+      const res = await apiDeleteFromList(userId.data, media.id)
+      if (res.data.error) {
+        showToast({
+          title: 'Error',
+          description: 'Se ha producido un error al eliminar el contenido',
+          variant: 'destructive'
+        })
+      } else {
+        showToast({
+          title: 'Contenido eliminado correctamente',
+          description: res.data.message,
+          variant: 'correct'
+        })
+        setIsInList(false)
+        if (removeFromList != undefined) {
+          removeFromList(media.id)
+        }
+      }
+    } catch (error) {
+      showToast({
+        title: 'Error',
+        description: 'Se ha producido un error al eliminar el contenido',
+        variant: 'destructive'
+      })
+    }
+    closeModal()
+  }
+  function showToast (item: {
+    title: string
+    description: string
+    variant?: 'default' | 'destructive' | 'correct' | null
+  }) {
+    return toast(item)
   }
 
   return (
@@ -142,8 +283,10 @@ export default function ListMenu ({
               className='transition duration-200 rounded-sm w-96 shadow-md border border-secondary'
               src={getImagePath(true, media.poster_path)}
               width={200}
-              height={700}
+              height={300}
               alt={media.title || media.name}
+              placeholder='blur'
+              blurDataURL='/ImagePlaceholder.png'
             />
           </div>
 
@@ -155,7 +298,7 @@ export default function ListMenu ({
           <div className='grid grid-cols-6 gap-5 justify-around  w-full'>
             <div className='col-span-6 lg:col-span-2'>
               <Label htmlFor='status'>Estado</Label>
-              <Select onValueChange={handleStatus} value={status}>
+              <Select onValueChange={handleStatus} value={status} required>
                 <SelectTrigger className='w-[100%]'>
                   <SelectValue placeholder='Estado' />
                 </SelectTrigger>
@@ -263,12 +406,37 @@ export default function ListMenu ({
             </div>
           </div>
           <div className='w-full flex gap-5 justify-end mt-5'>
-            <Button onClick={SaveList}>Guardar</Button>
             {isInList && (
-              <Button onClick={SaveList} variant={'outlinePrimary'}>
-                Eliminar
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant={'outlinePrimary'}>Eliminar</Button>
+                </DialogTrigger>
+                <DialogContent className='sm:max-w-[425px]'>
+                  <DialogHeader>
+                    <DialogTitle>Advertencia</DialogTitle>
+                    <DialogDescription>
+                      ¿Estás seguro de que quieres eliminar este contenido de tu
+                      lista multimedia?
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <DialogFooter>
+                    <div className='flex gap-5 justify-center sm:justify-end'>
+                      <DialogClose asChild>
+                        <Button onClick={removeItem} variant={'outlinePrimary'}>
+                          Aceptar
+                        </Button>
+                      </DialogClose>
+
+                      <DialogClose asChild>
+                        <Button>Cancelar</Button>
+                      </DialogClose>
+                    </div>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             )}
+            <Button onClick={saveList}>Guardar</Button>
           </div>
         </div>
         <button

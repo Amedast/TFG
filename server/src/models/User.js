@@ -15,7 +15,11 @@ const ListItemSchema = new mongoose.Schema({
 			type: [{ name: { type: String }, id: { type: Number } }],
 			required: true,
 		},
-		image: {
+		poster: {
+			type: String,
+			required: true,
+		},
+		background: {
 			type: String,
 			required: true,
 		},
@@ -25,6 +29,11 @@ const ListItemSchema = new mongoose.Schema({
 		},
 		episodes: {
 			type: Number,
+			required: true,
+		},
+		runtime: {
+			type: Number,
+			required: true,
 		},
 	},
 	status: {

@@ -25,8 +25,8 @@ export default async function MediaContainerCard ({
           width={500}
           height={750}
         />
-        <div className=''>
-          <h5>{item.title || item.name}</h5>
+        <div className='flex flex-1 flex-col'>
+          <h5 className='grow'>{item.title || item.name}</h5>
           {sortType == 'upcoming' ? (
             <h5>{item.release_date} </h5>
           ) : (

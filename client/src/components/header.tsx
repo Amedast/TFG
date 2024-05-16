@@ -4,15 +4,35 @@ import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProfileAvatar from './header/profileAvatar'
+import { apiGetUserId } from '@/services/user'
 
 export default function Header () {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    setIsLoggedIn(!!token)
+  const logout = () => {
+    localStorage.removeItem('token')
+    setIsLoggedIn(false)
+  }
 
+  useEffect(() => {
+    async function checkUser () {
+      const token = localStorage.getItem('token')
+      if (token) {
+        const userId = await apiGetUserId(token)
+
+        if (userId.data != null) {
+          setIsLoggedIn(true)
+        } else {
+          logout()
+        }
+      }
+    }
+
+    checkUser()
+  }, [])
+
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
@@ -23,11 +43,6 @@ export default function Header () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    setIsLoggedIn(false)
-  }
 
   return (
     <div

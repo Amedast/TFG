@@ -83,7 +83,7 @@ router.post("/register", async (req, res) => {
 function generateToken(userId) {
 	const secret = secretToken;
 	const payload = { userId };
-	const options = { expiresIn: "1d" };
+	const options = { expiresIn: "1y" };
 	const token = jwt.sign(payload, secret, options);
 	return token;
 }

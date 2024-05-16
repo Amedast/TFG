@@ -23,9 +23,7 @@ export default function ProfileAvatar ({ logout }: { logout: any }) {
             <Link href={'/profile/list'}>Mi Lista</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <Link href={'/profile/settings'}>
-            <DropdownMenuItem>Configuración</DropdownMenuItem>
-          </Link>
+
           <DropdownMenuItem onClick={logout}>Cerrar Sesión</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
