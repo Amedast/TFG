@@ -1,6 +1,5 @@
 'use client'
-import { ImageType, Season } from '@/types/media'
-import { useState } from 'react'
+import { Season } from '@/types/media'
 import Image from 'next/image'
 import {
   Carousel,

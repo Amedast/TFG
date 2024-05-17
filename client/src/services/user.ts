@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 import { LoginResponse, CheckResponse, RegisterResponse } from '@/types/user'
 import { apiBase } from '@/lib/exports'
+import { getCookie } from '@/lib/functions'
 
 // Login
 export const apiLogin = (
@@ -47,12 +48,8 @@ export const apiCheckPassword = (
   return axios.get<CheckResponse>(`${apiBase}/auth/checkpassword/${password}`)
 }
 
-export const apiGetUserId = (
-  token?: string
-): Promise<AxiosResponse<string>> => {
-  if (token == undefined) {
-    const token = localStorage.getItem('token')
-  }
+export const apiGetUserId = (): Promise<AxiosResponse<string>> => {
+  const token = getCookie('token')
 
   return axios.get<string>(`${apiBase}/auth/getuserid/${token}`)
 }

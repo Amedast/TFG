@@ -22,12 +22,10 @@ router.post("/add", async (req, res) => {
 				user.mediaList.data.series.time + item.timeWatched;
 			if (item.rating != undefined) {
 				user.mediaList.data.series.rating =
-					item.rating(
-						user.mediaList.data.series.rating *
-							user.mediaList.data.series.amount -
-							1 +
-							item.rating
-					) / user.mediaList.data.series.amount;
+					(user.mediaList.data.series.rating *
+						(user.mediaList.data.series.amount - 1) +
+						item.rating) /
+					user.mediaList.data.series.amount;
 			}
 		} else {
 			user.mediaList.data.movies.amount = user.mediaList.data.movies.amount + 1;

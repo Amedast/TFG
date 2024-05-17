@@ -84,7 +84,7 @@ export default function MediaList () {
       setActualPage(1)
       setBlockFetchPage(false)
       fetchTimeout.current = setTimeout(async () => {
-        fetchData(1, filterName, filterStatus, filterType,filterRating)
+        fetchData(1, filterName, filterStatus, filterType, filterRating)
       }, 500)
     }
 
@@ -95,7 +95,7 @@ export default function MediaList () {
         clearTimeout(fetchTimeout.current)
       }
     }
-  }, [filterName, filterStatus, filterType,filterRating])
+  }, [filterName, filterStatus, filterType, filterRating])
 
   useEffect(() => {
     if (!blockFetchPage) fetchData(actualPage)
@@ -106,12 +106,11 @@ export default function MediaList () {
     name?: string,
     status?: number[],
     types?: string[],
-    rating?: number,
+    rating?: number
   ) => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      try {
-        const userIdResponse = await apiGetUserId(token)
+    try {
+      const userIdResponse = await apiGetUserId()
+      if (userIdResponse.data != null) {
         const userId = userIdResponse.data
 
         const apiResponse = await apiGetList(
@@ -127,9 +126,11 @@ export default function MediaList () {
         setTotalPages(pagesInTotal)
         const list = apiResponse.data.mediaList
         setMediaList(list)
-      } catch (error) {
-        console.error('Error fetching data:', error)
+      } else {
+        location.replace('/login')
       }
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
   }
 

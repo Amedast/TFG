@@ -14,7 +14,7 @@ export default function VideoCarousel ({ videos }: { videos: VideoType[] }) {
           {videos.map((vid: VideoType, idx: number) => (
             <CarouselItem key={vid.id} className='sm:basis-1/2'>
               <iframe
-                className='  rounded-sm border border-secondary mx-auto w-full md:h-[15rem]'
+                className='rounded-sm border border-secondary mx-auto w-full md:h-[15rem]'
                 allowFullScreen
                 src={'https://www.youtube.com/embed/' + vid.key}
               ></iframe>

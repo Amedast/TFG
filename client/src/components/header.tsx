@@ -5,27 +5,27 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ProfileAvatar from './header/profileAvatar'
 import { apiGetUserId } from '@/services/user'
+import { deleteCookie } from '@/lib/functions'
+import { useRouter } from 'next/navigation'
 
 export default function Header () {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
+  const router = useRouter()
   const logout = () => {
-    localStorage.removeItem('token')
+    deleteCookie('token')
     setIsLoggedIn(false)
+    router.push('/')
   }
 
   useEffect(() => {
     async function checkUser () {
-      const token = localStorage.getItem('token')
-      if (token) {
-        const userId = await apiGetUserId(token)
-
-        if (userId.data != null) {
-          setIsLoggedIn(true)
-        } else {
-          logout()
-        }
+      const userId = await apiGetUserId()
+      if (userId.data != null) {
+        setIsLoggedIn(true)
+      } else {
+        logout()
       }
     }
 

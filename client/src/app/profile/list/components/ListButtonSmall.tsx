@@ -1,11 +1,11 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { MediaType, MediaDetailsType } from '@/types/media'
 import { apiGetUserId } from '@/services/user'
 import { apiCheckListItem } from '@/services/mediaList'
 import ListMenu from '@/components/list/listMenu'
 import { ListItem } from '@/types/mediaList'
+import { getCookie } from '@/lib/functions'
 
 export default function ListButton ({
   media,
@@ -24,34 +24,42 @@ export default function ListButton ({
   const [contentInList, setContentInList] = useState<ListItem | undefined>()
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = getCookie('token')
     setIsLogged(!!token)
   }, [])
 
   useEffect(() => {
     async function checkList () {
       if (isLogged) {
-        const token = localStorage.getItem('token') as string
-        const userId = await apiGetUserId(token)
-        const res = await apiCheckListItem(userId.data, media.id)
-        setIsInList(res.data.exists)
-        setContentInList(res.data.content)
+        const userId = await apiGetUserId()
+        if (userId.data != null) {
+          const res = await apiCheckListItem(userId.data, media.id)
+          setIsInList(res.data.exists)
+          setContentInList(res.data.content)
+        } else {
+          location.replace('/login')
+        }
       }
     }
     checkList()
   }, [isLogged])
 
   useEffect(() => {
-    if (contentInList != undefined) updateList(contentInList)
+    if (contentInList != undefined) {
+      updateList(contentInList)
+    }
   }, [contentInList])
 
   const openModal = async () => {
     if (isLogged) {
-      const token = localStorage.getItem('token') as string
-      const userId = await apiGetUserId(token)
-      const res = await apiCheckListItem(userId.data, media.id)
-      setIsInList(res.data.exists)
-      setIsModalOpen(true)
+      const userId = await apiGetUserId()
+      if (userId.data != null) {
+        const res = await apiCheckListItem(userId.data, media.id)
+        setIsInList(res.data.exists)
+        setIsModalOpen(true)
+      } else {
+        location.replace('/login')
+      }
     } else {
       location.replace('/login')
     }

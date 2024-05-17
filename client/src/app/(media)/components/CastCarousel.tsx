@@ -1,5 +1,5 @@
 'use client'
-import { ImageType, Person } from '@/types/media'
+import { Person } from '@/types/media'
 import Link from 'next/link'
 import Image from 'next/image'
 import {

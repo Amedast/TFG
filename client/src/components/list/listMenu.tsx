@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, ChangeEvent } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -166,8 +166,7 @@ export default function ListMenu ({
           : media.episode_run_time[0] * progress
     }
 
-    const token = localStorage.getItem('token') as string
-    const userId = await apiGetUserId(token)
+    const userId = await apiGetUserId()
     if (isInList) {
       try {
         const res = await apiEditListItem(userId.data, media.id, item)
@@ -222,8 +221,7 @@ export default function ListMenu ({
     }
   }
   async function removeItem () {
-    const token = localStorage.getItem('token') as string
-    const userId = await apiGetUserId(token)
+    const userId = await apiGetUserId()
     try {
       const res = await apiDeleteFromList(userId.data, media.id)
       if (res.data.error) {

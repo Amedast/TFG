@@ -1,6 +1,6 @@
 import MediaRating from '@/components/media/MediaRating'
 import { getImagePath, parseTime } from '@/lib/functions'
-import { apiGetMovieDetails, apiGetTVShowDetails } from '@/services/media'
+import { apiGetTVShowDetails } from '@/services/media'
 import Image from 'next/image'
 import ImageCarousel from '../../components/ImageCarousel'
 import VideoCarousel from '../../components/VideoCarousel'

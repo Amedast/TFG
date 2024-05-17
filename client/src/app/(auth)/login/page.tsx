@@ -23,6 +23,7 @@ export default function Login () {
         setError(loginResponse.data.message as string)
       } else {
         localStorage.setItem('token', loginResponse.data.encodedToken)
+        document.cookie = `token=${loginResponse.data.encodedToken}; path=/; secure; samesite=strict`
         location.replace('/')
       }
     } catch (err) {
