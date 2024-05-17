@@ -207,7 +207,7 @@ export default function MediaList () {
                   <Label className='text-lg'>Estado</Label>
                   <div className='flex flex-1 flex-col gap-1.5'>
                     {status.map(item => (
-                      <div className='flex items-center gap-3'>
+                      <div key={item.id} className='flex items-center gap-3'>
                         <Checkbox
                           checked={
                             filterStatus.findIndex(
@@ -227,7 +227,7 @@ export default function MediaList () {
                   <Label className='text-lg'>Tipo</Label>
                   <div className='flex flex-1 flex-col gap-1.5'>
                     {types.map(item => (
-                      <div className='flex items-center gap-3'>
+                      <div key={item.id} className='flex items-center gap-3'>
                         <Checkbox
                           checked={
                             filterType.findIndex(
@@ -267,7 +267,7 @@ export default function MediaList () {
             <Label className='text-lg'>Estado</Label>
             <div className='flex flex-1 flex-col gap-1.5'>
               {status.map(item => (
-                <div className='flex items-center gap-3'>
+                <div key={item.id} className='flex items-center gap-3'>
                   <Checkbox
                     checked={
                       filterStatus.findIndex((it: number) => it == item.id) !=
@@ -286,7 +286,7 @@ export default function MediaList () {
             <Label className='text-lg'>Tipo</Label>
             <div className='flex flex-1 flex-col gap-1.5'>
               {types.map(item => (
-                <div className='flex items-center gap-3'>
+                <div key={item.id} className='flex items-center gap-3'>
                   <Checkbox
                     checked={
                       filterType.findIndex((it: string) => it == item.id) != -1

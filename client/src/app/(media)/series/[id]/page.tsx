@@ -95,7 +95,10 @@ export default async function TVShowDetails ({
               <p className='font-semibold'>Géneros</p>
               <div className='flex flex-wrap gap-2'>
                 {serie.genres.map((genre: Genre, idx: number) => (
-                  <div className='border border-primary rounded-lg px-2 py-1 w-fit'>
+                  <div
+                    key={genre.id}
+                    className='border border-primary rounded-lg px-2 py-1 w-fit'
+                  >
                     {genre.name}
                   </div>
                 ))}
