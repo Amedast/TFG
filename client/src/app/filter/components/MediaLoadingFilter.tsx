@@ -175,7 +175,7 @@ export default function MediaLoadingFilter () {
                 </SelectTrigger>
                 <SelectContent>
                   {years.map(selectYear => (
-                    <SelectItem value={selectYear.toString()}>
+                    <SelectItem key={selectYear} value={selectYear.toString()}>
                       {selectYear}
                     </SelectItem>
                   ))}

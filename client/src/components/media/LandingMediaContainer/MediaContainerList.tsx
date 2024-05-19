@@ -2,6 +2,7 @@ import { getCarouselTitle, getUrlByType } from '@/lib/functions'
 import { apiGetMediaList } from '@/services/media'
 import { MediaCardType, MediaType, SortType } from '@/types/media'
 import MediaContainerCard from './MediaContainerCard'
+import Link from 'next/link'
 export default async function MediaContainerList ({
   type,
   sortType
@@ -26,10 +27,12 @@ export default async function MediaContainerList ({
           />
         ))}
       </div>
-      <div className='text-end'>
-        <label className='hover:underline transition duration-200'>
-          Ver más
-        </label>
+      <div className='text-end  flex justify-end'>
+        <Link href={getUrlByType(type) + 'search?sort=' + sortType}>
+          <div className='hover:underline hover:text-primary transition duration-200'>
+            Ver más
+          </div>
+        </Link>
       </div>
     </div>
   )

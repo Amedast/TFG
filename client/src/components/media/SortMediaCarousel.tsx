@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/carousel'
 import MediaCard from './MediaCard'
 import { apiGetMediaList } from '@/services/media'
-import { getCarouselTitle } from '@/lib/functions'
+import { getCarouselTitle, getUrlByType } from '@/lib/functions'
+import Link from 'next/link'
 export default async function SortMediaCarousel ({
   type,
   sortType
@@ -51,10 +52,12 @@ export default async function SortMediaCarousel ({
         </Carousel>
       </div>
       <div className='flex justify-center w-full mt-2'>
-        <div className='w-[80%] text-sm justify-end text-end'>
-          <label className='hover:underline transition duration-200'>
-            Ver más
-          </label>
+        <div className='w-[80%] text-sm justify-end text-end flex '>
+          <Link href={getUrlByType(type) + 'search?sort=' + sortType}>
+            <div className='hover:underline hover:text-primary transition duration-200 w-fit'>
+              Ver más
+            </div>
+          </Link>
         </div>
       </div>
     </div>

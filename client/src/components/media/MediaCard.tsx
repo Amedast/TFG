@@ -30,6 +30,7 @@ export default function MediaCard ({
       animate='visible'
       transition={{ delay: 0.25, ease: 'easeInOut', duration: 1 }}
       viewport={{ amount: 0 }}
+      className='h-full'
     >
       <Link href={getUrlByType(type) + '' + item.id}>
         <div className='relative group select-none rounded-sm h-full '>
