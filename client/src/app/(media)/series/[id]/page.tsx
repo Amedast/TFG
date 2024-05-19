@@ -140,6 +140,77 @@ export default async function TVShowDetails ({
                 )}
               </div>
             </div>
+            {serie['watch/providers']?.results?.ES?.flatrate && (
+              <div>
+                <p className='font-semibold'>Servicios de Streaming</p>
+                <div>
+                  <div className='flex flex-wrap gap-3 mt-1'>
+                    {serie['watch/providers'].results.ES.flatrate.map(
+                      provider => (
+                        <div
+                          key={provider.provider_id + 'buy'}
+                          className='rounded-sm'
+                        >
+                          <Image
+                            className='rounded-sm'
+                            src={getImagePath(false, provider.logo_path)}
+                            alt={provider.provider_name}
+                            width={50}
+                            height={50}
+                          />
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            {serie['watch/providers']?.results?.ES?.rent && (
+              <div>
+                <p className='font-semibold'>Alquiler</p>
+                <div>
+                  <div className='flex flex-wrap gap-3 mt-1'>
+                    {serie['watch/providers'].results.ES.rent.map(provider => (
+                      <div
+                        key={provider.provider_id + 'buy'}
+                        className='rounded-sm'
+                      >
+                        <Image
+                          className='rounded-sm'
+                          src={getImagePath(false, provider.logo_path)}
+                          alt={provider.provider_name}
+                          width={50}
+                          height={50}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            {serie['watch/providers']?.results?.ES?.buy && (
+              <div>
+                <p className='font-semibold'>Compra</p>
+                <div>
+                  <div className='flex flex-wrap gap-3 mt-1'>
+                    {serie['watch/providers'].results.ES.buy.map(provider => (
+                      <div
+                        key={provider.provider_id + 'buy'}
+                        className='rounded-sm'
+                      >
+                        <Image
+                          className='rounded-sm'
+                          src={getImagePath(false, provider.logo_path)}
+                          alt={provider.provider_name}
+                          width={50}
+                          height={50}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className='w-[80%] xl:mt-[5rem] flex flex-col flex-1 gap-10 '>

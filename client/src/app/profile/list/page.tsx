@@ -332,7 +332,7 @@ export default function MediaList () {
           <Pagination>
             <PaginationContent>
               {actualPage > 1 && (
-                <PaginationItem>
+                <PaginationItem className='hidden sm:block'>
                   <PaginationPrevious
                     href='#'
                     onClick={() => setActualPage(actualPage - 1)}
@@ -370,7 +370,7 @@ export default function MediaList () {
                 {actualPage + 1 < totalPages && <PaginationEllipsis />}
               </PaginationItem>
               {actualPage + 1 <= totalPages && (
-                <PaginationItem>
+                <PaginationItem className='hidden sm:block'>
                   <PaginationNext
                     href='#'
                     onClick={() => setActualPage(actualPage + 1)}

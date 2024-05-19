@@ -5,7 +5,9 @@ import {
   MediaCardType,
   MovieDetailsType,
   TVShowDetailsType,
-  PersonDetailsType
+  PersonDetailsType,
+  SearchContentCall,
+  DiscoverContentCall
 } from '@/types/media'
 import { apiBase } from '@/lib/exports'
 
@@ -104,6 +106,69 @@ export const apiGetPersonDetails = async (
     return res
   } catch (error) {
     console.error('Error al obtener los detalles de la persona:', error)
+    throw error
+  }
+}
+
+export const apiGetSearchContent = (
+  text: string,
+  page: number
+): Promise<AxiosResponse<SearchContentCall>> => {
+  try {
+    const res = axios.get<SearchContentCall>(
+      `${apiBase}/api/search?text=${text}&page=${page}`
+    )
+    return res
+  } catch (error) {
+    console.error('Error al hacer la busqueda del conteniddod: ', error)
+    throw error
+  }
+}
+
+export const apiGetDiscoverContent = (
+  type: MediaType,
+  page?: number,
+  genre?: string,
+  sort_by?: string,
+  sort_order?: string,
+  min_rating?: number,
+  max_rating?: number,
+  year?: string
+): Promise<AxiosResponse<DiscoverContentCall>> => {
+  try {
+    let pageParam = page ? page : 1
+    let queryParams = `?type=${type}&page=${pageParam}`
+
+    if (genre) {
+      queryParams += `&with_genres=${encodeURIComponent(genre)}`
+    }
+
+    if (sort_by) {
+      queryParams += `&sort_by=${encodeURIComponent(sort_by)}.${
+        sort_order || 'desc'
+      }`
+
+      if (sort_by == 'vote_average') queryParams += '&vote_count=200'
+    }
+
+    if (min_rating !== undefined) {
+      queryParams += `&min_rating=${encodeURIComponent(min_rating)}`
+    }
+
+    if (max_rating !== undefined) {
+      queryParams += `&max_rating=${encodeURIComponent(max_rating)}`
+    }
+
+    if (year) {
+      queryParams += `&year=${encodeURIComponent(year)}`
+    }
+
+    const res = axios.get<DiscoverContentCall>(
+      `${apiBase}/api/discover${queryParams}`
+    )
+    return res
+  } catch (error) {
+    console.error('Error al hacer la busqueda del conteniddod: ', error)
     throw error
   }
 }

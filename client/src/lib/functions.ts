@@ -24,7 +24,11 @@ export const getMediaType = (media_type: string, singular?: boolean) => {
 }
 
 export const getUrlByType = (media_type: string) => {
-  return media_type == 'tv' ? '/series/' : '/movies/'
+  return media_type == 'tv'
+    ? '/series/'
+    : media_type == 'movie'
+    ? '/movies/'
+    : '/cast/'
 }
 
 export const mixMoviesAndTVShows = (array1: any[], array2: any[]) => {
@@ -165,4 +169,19 @@ export function getCookie (name: string): string | undefined {
 
 export function deleteCookie (name: string): void {
   document.cookie = `${name}=; Max-Age=0; path=/; secure; samesite=strict`
+}
+
+export const parseSortContent = (sort: string, type: MediaType) => {
+  switch (sort) {
+    case 'popular':
+      return 'popularity'
+    case 'top_rated':
+      return 'vote_average'
+    case 'name':
+      return type == 'tv' ? 'name' : 'title'
+    case 'upcoming':
+      return 'date'
+    default:
+      return undefined
+  }
 }

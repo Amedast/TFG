@@ -22,7 +22,6 @@ export default function ListButton ({
 
   useEffect(() => {
     const token = getCookie('token')
-    console.log(!!token)
     setIsLogged(!!token)
   }, [])
 

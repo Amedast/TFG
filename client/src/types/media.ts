@@ -8,6 +8,7 @@ export type MediaCardType = {
   release_date?: string
   overview: string
   media_type: string
+  first_air_date?: string
 }
 
 export type MediaType = 'movie' | 'tv'
@@ -41,6 +42,7 @@ export type MovieDetailsType = {
   credits: Credits
   recommendations: Recommendations
   similar: Similar
+  'watch/providers': Providers
   images: Images
 }
 
@@ -65,6 +67,7 @@ export type TVShowDetailsType = {
   credits: Credits
   recommendations: Recommendations
   similar: Similar
+  'watch/providers': Providers
   images: Images
 }
 
@@ -90,6 +93,7 @@ export type MediaDetailsType = {
   credits: Credits
   recommendations: Recommendations
   similar: Similar
+  'watch/providers': Providers
   images: Images
   episode_run_time: number[]
   name: string
@@ -184,6 +188,23 @@ export interface Media {
   vote_average: number
 }
 
+export type Providers = {
+  results: {
+    ES: {
+      link: string
+      rent?: Provider[]
+      buy?: Provider[]
+      flatrate?: Provider[]
+    }
+  }
+}
+
+export type Provider = {
+  logo_path: string
+  provider_id: number
+  provider_name: string
+}
+
 export interface Images {
   backdrops: ImageType[]
   logos: ImageType[]
@@ -206,4 +227,32 @@ export interface Season {
   poster_path: string
   season_number: number
   vote_average: number
+}
+
+export interface SearchContentCall {
+  page: number
+  results: ContentResult[]
+  total_pages: number
+  total_results: number
+}
+
+export interface ContentResult {
+  id: number
+  poster_path?: string
+  profile_path?: string
+  media_type: string
+  title?: string
+  release_date?: string
+  vote_average?: number
+  name?: string
+  first_air_date?: string
+  gender?: number
+  known_for_department?: string
+}
+
+export interface DiscoverContentCall {
+  page: number
+  results: MediaCardType[]
+  total_pages: number
+  total_results: number
 }

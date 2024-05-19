@@ -1,5 +1,4 @@
 'use client'
-import { Input } from '@/components/ui/inputSearch'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -7,6 +6,10 @@ import ProfileAvatar from './header/profileAvatar'
 import { apiGetUserId } from '@/services/user'
 import { deleteCookie } from '@/lib/functions'
 import { useRouter } from 'next/navigation'
+import SearchBar from './header/searchBar'
+import { HeaderItems } from '@/lib/exports'
+
+import DesktopHeaderItem from './header/desktopHeaderItem'
 
 export default function Header () {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -64,28 +67,28 @@ export default function Header () {
             <span>DB</span>
           </div>
         </Link>
-        <div className='navigation justify-center flex items-center gap-[2rem] '>
-          <label>Películas</label>
-          <label>Series</label>
-          <label>Descubre</label>
+        <div className=' flex items-center '>
+          {HeaderItems.map(item => (
+            <DesktopHeaderItem
+              key={item.title}
+              title={item.title}
+              popover={item.popover}
+              popoverItems={item.popoverItems}
+              url={item.url}
+            />
+          ))}
         </div>
       </div>
 
-      <div className='grow flex justify-end'>
-        <div className='searchbar w-fit'>
-          <Input
-            type='text'
-            placeholder='Buscar por nombre...'
-            className='w-full'
-          />
-        </div>
+      <div className=' grow flex justify-end '>
+        <SearchBar />
       </div>
-      <div className='auth w-[10%] flex justify-center '>
+      <div className='auth w-[15%] flex justify-center '>
         {isLoggedIn ? (
           <ProfileAvatar logout={logout} />
         ) : (
           <div className='flex gap-3'>
-            <Button variant='ghost'>
+            <Button variant='outlinePrimary'>
               <Link href={'/login'}>Iniciar Sesión</Link>
             </Button>
             <Button className='bg-primary'>
