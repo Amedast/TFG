@@ -93,7 +93,7 @@ export type MediaDetailsType = {
   credits: Credits
   recommendations: Recommendations
   similar: Similar
-  'watch/providers': Providers
+  'watch/providers'?: Providers
   images: Images
   episode_run_time: number[]
   name: string
