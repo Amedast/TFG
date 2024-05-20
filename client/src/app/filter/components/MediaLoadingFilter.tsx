@@ -55,7 +55,7 @@ export default function MediaLoadingFilter () {
         order,
         minRating,
         maxRating,
-        year
+        year == 'year' ? undefined : year
       )
       if (response) {
         const res = response.data
@@ -174,6 +174,9 @@ export default function MediaLoadingFilter () {
                   <SelectValue placeholder='Año' />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem key={'default'} value={'year'}>
+                    Año
+                  </SelectItem>
                   {years.map(selectYear => (
                     <SelectItem key={selectYear} value={selectYear.toString()}>
                       {selectYear}
@@ -216,7 +219,7 @@ export default function MediaLoadingFilter () {
                   key={item.id}
                   item={item}
                   hover={true}
-                  type='movie'
+                  type={type}
                   sortType={sort as SortType}
                   height={60}
                 />

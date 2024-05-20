@@ -48,8 +48,10 @@ export const apiCheckPassword = (
   return axios.get<CheckResponse>(`${apiBase}/auth/checkpassword/${password}`)
 }
 
-export const apiGetUserId = (): Promise<AxiosResponse<string>> => {
-  const token = getCookie('token')
+export const apiGetUserId = (
+  paramToken?: string
+): Promise<AxiosResponse<string>> => {
+  const token = paramToken ? paramToken : getCookie('token')
 
   return axios.get<string>(`${apiBase}/auth/getuserid/${token}`)
 }

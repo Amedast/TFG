@@ -44,6 +44,7 @@ export type MovieDetailsType = {
   similar: Similar
   'watch/providers': Providers
   images: Images
+  success?: boolean
 }
 
 export type TVShowDetailsType = {
@@ -69,6 +70,7 @@ export type TVShowDetailsType = {
   similar: Similar
   'watch/providers': Providers
   images: Images
+  success?: boolean
 }
 
 export type MediaDetailsType = {
@@ -124,6 +126,7 @@ export interface PersonDetailsType {
     cast: MediaCardType[]
     crew: MediaCardType[]
   }
+  success?: boolean
 }
 
 export interface Genre {

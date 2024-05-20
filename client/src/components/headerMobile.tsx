@@ -40,7 +40,7 @@ export default function HeaderMobile () {
       if (userId.data != null) {
         setIsLoggedIn(true)
       } else {
-        logout()
+        if (isLoggedIn) logout()
       }
     }
 

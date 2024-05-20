@@ -27,9 +27,13 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/use-toast'
 
 export default function MediaList () {
   const fetchTimeout = useRef<NodeJS.Timeout | null>(null)
+  const router = useRouter()
+  const { toast } = useToast()
   const [mediaList, setMediaList] = useState<MediaListType>({
     data: {
       series: { amount: 0, time: 0, rating: 0 },
@@ -127,11 +131,24 @@ export default function MediaList () {
         const list = apiResponse.data.mediaList
         setMediaList(list)
       } else {
-        location.replace('/login')
+        showToast({
+          title: 'Error',
+          description: 'Debe iniciar sesión para acceder a esa URL',
+          variant: 'destructive'
+        })
+        router.push('/login')
       }
     } catch (error) {
       console.error('Error fetching data:', error)
     }
+  }
+
+  function showToast (item: {
+    title: string
+    description: string
+    variant?: 'default' | 'destructive' | 'correct' | null
+  }) {
+    return toast(item)
   }
 
   const handleCheckboxStatusChange = (item: { id: number; label: string }) => {

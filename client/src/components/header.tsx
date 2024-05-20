@@ -28,7 +28,7 @@ export default function Header () {
       if (userId.data != null) {
         setIsLoggedIn(true)
       } else {
-        logout()
+        if (isLoggedIn) logout()
       }
     }
 

@@ -8,6 +8,7 @@ import CastCarousel from '../../components/CastCarousel'
 import { Genre, MediaDetailsType, SpokenLanguage } from '@/types/media'
 import ListButton from '../../components/ListButton'
 import SeasonCarousel from '../../components/SeasonCarousel'
+import ErrorComponent from '@/components/error'
 
 export const generateMetadata = async ({
   params
@@ -16,6 +17,11 @@ export const generateMetadata = async ({
 }) => {
   const apiResponse = await apiGetTVShowDetails(params.id)
   const serie = apiResponse.data
+  if (serie.success == false) {
+    return {
+      title: 'ERROR'
+    }
+  }
   return {
     title: `${serie.name}`
   }
@@ -28,6 +34,9 @@ export default async function TVShowDetails ({
 }) {
   const apiResponse = await apiGetTVShowDetails(params.id)
   const serie = apiResponse.data
+  if (serie.success == false) {
+    return <ErrorComponent text='Error: Serie no encontrada' />
+  }
   return (
     <div>
       <div className='relative flex justify-center'>

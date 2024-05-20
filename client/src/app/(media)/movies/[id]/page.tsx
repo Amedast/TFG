@@ -7,6 +7,7 @@ import VideoCarousel from '../../components/VideoCarousel'
 import CastCarousel from '../../components/CastCarousel'
 import { Genre, MediaDetailsType, SpokenLanguage } from '@/types/media'
 import ListButton from '../../components/ListButton'
+import ErrorComponent from '@/components/error'
 
 export const generateMetadata = async ({
   params
@@ -15,6 +16,11 @@ export const generateMetadata = async ({
 }) => {
   const apiResponse = await apiGetMovieDetails(params.id)
   const movie = apiResponse.data
+  if (movie.success == false) {
+    return {
+      title: 'ERROR'
+    }
+  }
   return {
     title: `${movie.title}`
   }
@@ -27,6 +33,9 @@ export default async function MovieDetails ({
 }) {
   const apiResponse = await apiGetMovieDetails(params.id)
   const movie = apiResponse.data
+  if (movie.success == false) {
+    return <ErrorComponent text='Error: Película no encontrada' />
+  }
   return (
     <div>
       <div className='relative flex justify-center'>

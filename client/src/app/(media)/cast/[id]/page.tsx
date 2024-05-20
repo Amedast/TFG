@@ -3,6 +3,7 @@ import { apiGetPersonDetails } from '@/services/media'
 import Image from 'next/image'
 import ImageCarousel from '../../components/ImageCarousel'
 import MediaCarousel from '../../components/MediaCarousel'
+import ErrorComponent from '@/components/error'
 
 export const generateMetadata = async ({
   params
@@ -11,6 +12,11 @@ export const generateMetadata = async ({
 }) => {
   const apiResponse = await apiGetPersonDetails(params.id)
   const person = apiResponse.data
+  if (person.success == false) {
+    return {
+      title: 'ERROR'
+    }
+  }
   return {
     title: `${person.name}`
   }
@@ -23,6 +29,9 @@ export default async function MovieDetails ({
 }) {
   const apiResponse = await apiGetPersonDetails(params.id)
   const person = apiResponse.data
+  if (person.success == false) {
+    return <ErrorComponent text='Error: Persona no encontrada' />
+  }
   return (
     <div className='container mx-auto py-[10rem] w-full  gap-10  bg-neutral-800/10 rounded-sm'>
       <div className='flex gap-10'>
@@ -40,10 +49,10 @@ export default async function MovieDetails ({
               <div className='truncate'>
                 <a
                   className='hover:text-primary transition duration-200'
-                  href={'https://www.imdb.com/title/' + person.imdb_id}
+                  href={'https://www.imdb.com/name/' + person.imdb_id}
                   target='_blank'
                 >
-                  {'https://www.imdb.com/title/' + person.imdb_id}
+                  {'https://www.imdb.com/name/' + person.imdb_id}
                 </a>
               </div>
             </div>
