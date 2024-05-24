@@ -86,7 +86,11 @@ export default function HeaderMobile () {
             <path d='M4 12l16 0' />
             <path d='M4 18l16 0' />
           </svg>
-          <Link href={'/'} className='grow justify-center flex'>
+          <Link
+            href={'/'}
+            prefetch={false}
+            className='grow justify-center flex'
+          >
             <div className='logo text-5xl w-fit flex '>
               <div>
                 <span className='font-black text-primary'>P</span>
@@ -171,6 +175,7 @@ export default function HeaderMobile () {
                       </AccordionTrigger>
                       {item.popoverItems.map(it => (
                         <Link
+                          prefetch={false}
                           key={it.url}
                           href={it.url}
                           onClick={() => setMenu(false)}
@@ -184,6 +189,7 @@ export default function HeaderMobile () {
                   ) : (
                     <>
                       <Link
+                        prefetch={false}
                         href={item.url as string}
                         onClick={() => setMenu(false)}
                       >
@@ -197,7 +203,11 @@ export default function HeaderMobile () {
               ))}
               {isLoggedIn && (
                 <>
-                  <Link href={'/profile/list'} onClick={() => setMenu(false)}>
+                  <Link
+                    prefetch={false}
+                    href={'/profile/list'}
+                    onClick={() => setMenu(false)}
+                  >
                     <div className='mx-5 my-4'>Mi lista</div>
                   </Link>
                   <Separator />
@@ -241,12 +251,16 @@ export default function HeaderMobile () {
               <div className='w-full mx-[10%] mb-[10%]'>
                 <div className='mb-2' onClick={() => setMenu(false)}>
                   <Button variant='outlinePrimary' className='w-full '>
-                    <Link href={'/login'}>Iniciar Sesión</Link>
+                    <Link href={'/login'} prefetch={false}>
+                      Iniciar Sesión
+                    </Link>
                   </Button>
                 </div>
                 <div onClick={() => setMenu(false)}>
                   <Button className='w-full'>
-                    <Link href={'/register'}>Registrate</Link>
+                    <Link href={'/register'} prefetch={false}>
+                      Registrate
+                    </Link>
                   </Button>
                 </div>
               </div>

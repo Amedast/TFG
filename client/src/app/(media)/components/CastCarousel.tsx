@@ -20,7 +20,7 @@ export default function CastCarousel ({ cast }: { cast: Person[] }) {
               key={person.id}
               className='basis-1/2 sm:basis-1/3 md:basis-1/5 xl:basis-1/6'
             >
-              <Link href={'/cast/' + person.id}>
+              <Link href={'/cast/' + person.id} prefetch={false}>
                 <div className='relative group select-none rounded-sm h-full '>
                   <div className='absolute rounded-sm w-full h-full bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition duration-200 flex flex-1 flex-col justify-end p-2'>
                     <div className='text-center font-bold'>

@@ -174,7 +174,7 @@ export default function Register () {
               </div>
               <div className='mt-5 text-sm text-center '>
                 ¿Ya tienes cuenta?{' '}
-                <Link href='/login' className='underline'>
+                <Link href='/login' prefetch={false} className='underline'>
                   Iniciar sesión
                 </Link>
               </div>
@@ -215,7 +215,7 @@ export default function Register () {
                 </div>
               </div>
               <div className='mt-5 text-sm text-center '>
-                <Link href='/login' className='underline'>
+                <Link href='/login' prefetch={false} className='underline'>
                   Iniciar sesión
                 </Link>
               </div>

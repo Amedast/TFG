@@ -56,7 +56,7 @@ export default function Header () {
       } text-neutral-100 p-5 hidden lg:flex gap-[3rem] fixed w-full items-center z-50 transition-colors duration-300 px-[5rem]`}
     >
       <div className='flex gap-[3rem]'>
-        <Link href={'/'}>
+        <Link href={'/'} prefetch={false}>
           <div className='logo text-5xl w-fit flex '>
             <div>
               <span className='font-black text-primary'>P</span>
@@ -89,10 +89,14 @@ export default function Header () {
         ) : (
           <div className='flex gap-3'>
             <Button variant='outlinePrimary'>
-              <Link href={'/login'}>Iniciar Sesión</Link>
+              <Link href={'/login'} prefetch={false}>
+                Iniciar Sesión
+              </Link>
             </Button>
             <Button className='bg-primary'>
-              <Link href={'/register'}>Registrate</Link>
+              <Link href={'/register'} prefetch={false}>
+                Registrate
+              </Link>
             </Button>
           </div>
         )}

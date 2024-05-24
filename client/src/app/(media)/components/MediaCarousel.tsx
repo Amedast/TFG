@@ -25,7 +25,7 @@ export default function MediaCarousel ({
         <CarouselContent>
           {media.map((med: MediaCardType) => (
             <CarouselItem key={med.id} className='basis-1/5'>
-              <Link href={getUrlByType(type) + '' + med.id}>
+              <Link href={getUrlByType(type) + '' + med.id} prefetch={false}>
                 <div className='relative group select-none rounded-sm h-full '>
                   <div className='absolute w-full h-full rounded-sm bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition duration-200 flex flex-1 flex-col justify-end p-2'>
                     <div className='text-center font-semibold'>

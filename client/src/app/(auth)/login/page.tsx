@@ -68,7 +68,7 @@ export default function Login () {
           </div>
           <div className='mt-5 text-sm text-center '>
             ¿No tienes cuenta?{' '}
-            <Link href='/register' className='underline'>
+            <Link href='/register' prefetch={false} className='underline'>
               Registrate
             </Link>
           </div>

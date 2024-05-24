@@ -53,7 +53,10 @@ export default async function SortMediaCarousel ({
       </div>
       <div className='flex justify-center w-full mt-2'>
         <div className='w-[80%] text-sm justify-end text-end flex '>
-          <Link href={getUrlByType(type) + 'search?sort=' + sortType}>
+          <Link
+            href={getUrlByType(type) + 'search?sort=' + sortType}
+            prefetch={false}
+          >
             <div className='hover:underline hover:text-primary transition duration-200 w-fit'>
               Ver más
             </div>

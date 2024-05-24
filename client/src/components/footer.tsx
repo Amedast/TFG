@@ -1,7 +1,7 @@
 export default function Footer () {
   return (
-    <div className='bg-primary text-neutral-100 px-5 py-[3rem] w-full mt-[5rem]'>
-      <div className='flex justify-around items-center w-[30%] mx-auto'>
+    <div className='bg-primary text-neutral-100 py-[3rem] w-full mt-[5rem] px-[10%] sm:px-[30%]'>
+      <div className='flex justify-around items-center mx-auto'>
         <div className='rounded-full bg-background p-2'>
           <svg
             xmlns='http://www.w3.org/2000/svg'

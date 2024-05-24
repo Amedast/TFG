@@ -32,7 +32,7 @@ export default function MediaCard ({
       viewport={{ amount: 0 }}
       className='h-full'
     >
-      <Link href={getUrlByType(type) + '' + item.id}>
+      <Link href={getUrlByType(type) + '' + item.id} prefetch={false}>
         <div className='relative group select-none rounded-sm h-full '>
           {hover && (
             <div className='absolute w-full h-full rounded-sm bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition duration-200 flex flex-1 flex-col justify-end p-2'>

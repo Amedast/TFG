@@ -15,6 +15,7 @@ import ListButton from '../../components/ListButton'
 import ErrorComponent from '@/components/error'
 import MediaCarousel from '../../components/MediaCarousel'
 import { apiGetSimilarContent } from '@/services/recommendation'
+import ContentRecommendation from '../../components/Recommendation'
 
 export const generateMetadata = async ({
   params
@@ -40,8 +41,7 @@ export default async function MovieDetails ({
 }) {
   const apiResponse = await apiGetMovieDetails(params.id)
   const movie = apiResponse.data
-  const recommendResponse = await apiGetSimilarContent('movie', params.id)
-  const recommendedContent = recommendResponse.data
+
   if (movie.success == false) {
     return <ErrorComponent text='Error: Película no encontrada' />
   }
@@ -273,22 +273,7 @@ export default async function MovieDetails ({
             </div>
           </div>
 
-          <div>
-            <h3 className='text-2xl font-semibold mb-3'>
-              PRUEBAAAAAAAAAAAAAAAAAAAAAAAAAA
-            </h3>
-            <div className=' mt-5 flex flex-wrap gap-3'>
-              {recommendedContent.map((item: MediaCardType) => (
-                <Image
-                  className={`transition duration-200 rounded-sm h-full`}
-                  src={getImagePath(false, item.poster_path)}
-                  alt={(item.name as string) || (item.title as string)}
-                  width={150}
-                  height={750}
-                />
-              ))}
-            </div>
-          </div>
+          <ContentRecommendation contentId={params.id} type='movie' />
         </div>
       </div>
     </div>
