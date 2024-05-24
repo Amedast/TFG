@@ -5,18 +5,17 @@ dotenv.config();
 
 const router = express.Router();
 
-const tmbdToken = process.env.TMDB_API_TOKEN;
-
+const TMDB_Token = process.env.TMDB_API_TOKEN;
+const TMDB_URL = "https://api.themoviedb.org/3";
+const options = {
+	headers: {
+		Accept: "application/json",
+		Authorization: "Bearer " + TMDB_Token,
+	},
+};
 router.get("/medialist", async (req, res) => {
 	const { type, sorttype } = req.query;
-	const url =
-		"https://api.themoviedb.org/3/" + type + "/" + sorttype + "?language=es-ES";
-	const options = {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer " + tmbdToken,
-		},
-	};
+	const url = TMDB_URL + "/" + type + "/" + sorttype + "?language=es-ES";
 
 	try {
 		const response = await fetch(url, options).then((res) => res.json());
@@ -29,16 +28,8 @@ router.get("/medialist", async (req, res) => {
 });
 
 router.get("/trendinglist", async (req, res) => {
-	const movieUrl =
-		"https://api.themoviedb.org/3/trending/movie/week?language=es-ES";
-	const tvUrl = "https://api.themoviedb.org/3/trending/tv/week?language=es-ES";
-	const options = {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer " + tmbdToken,
-		},
-	};
-
+	const movieUrl = TMDB_URL + "/trending/movie/week?language=es-ES";
+	const tvUrl = TMDB_URL + "/trending/tv/week?language=es-ES";
 	try {
 		const [movieResponse, tvResponse] = await Promise.all([
 			fetch(movieUrl, options).then((res) => res.json()),
@@ -61,21 +52,14 @@ router.get("/trendinglist", async (req, res) => {
 router.get("/mediadetails", async (req, res) => {
 	const { type, id } = req.query;
 	const url =
-		"https://api.themoviedb.org/3/" +
+		TMDB_URL +
+		"/" +
 		type +
 		"/" +
 		id +
 		"?language=es-ES&append_to_response=videos,credits,recommendations,similar,movie_credits,tv_credits,watch/providers";
-	const imagesUrl =
-		"https://api.themoviedb.org/3/" + type + "/" + id + "/images";
-	const videosUrl =
-		"https://api.themoviedb.org/3/" + type + "/" + id + "/videos";
-	const options = {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer " + tmbdToken,
-		},
-	};
+	const imagesUrl = TMDB_URL + "/" + type + "/" + id + "/images";
+	const videosUrl = TMDB_URL + "/" + type + "/" + id + "/videos";
 
 	try {
 		const response = await fetch(url, options).then((res) => res.json());
@@ -93,16 +77,7 @@ router.get("/search", async (req, res) => {
 	const { text, page } = req.query;
 
 	const url =
-		"https://api.themoviedb.org/3/search/multi?query=" +
-		text +
-		"&language=es-Es&page=" +
-		page;
-	const options = {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer " + tmbdToken,
-		},
-	};
+		TMDB_URL + "/search/multi?query=" + text + "&language=es-Es&page=" + page;
 
 	try {
 		const response = await fetch(url, options).then((res) => res.json());
@@ -124,7 +99,7 @@ router.get("/discover", async (req, res) => {
 		year,
 	} = req.query;
 	const url =
-		`https://api.themoviedb.org/3/discover/${type}?&language=es-ES&include_adult=false&include_null_first_air_dates=false` +
+		`${TMDB_URL}/discover/${type}?language=es-ES&include_adult=false&include_null_first_air_dates=false` +
 		`&page=${page || 1}` +
 		(genre ? `&with_genres=${genre}` : "") +
 		(sort_by
@@ -145,13 +120,6 @@ router.get("/discover", async (req, res) => {
 			  }=${year}`
 			: "");
 
-	const options = {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer " + tmbdToken,
-		},
-	};
-
 	try {
 		const response = await fetch(url, options).then((res) => res.json());
 		res.status(200).json(response);
@@ -159,4 +127,5 @@ router.get("/discover", async (req, res) => {
 		res.status(500).json({ error: "Error en la búsqueda" });
 	}
 });
+
 export { router as tmdbRouter };

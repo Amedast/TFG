@@ -5,10 +5,16 @@ import Image from 'next/image'
 import ImageCarousel from '../../components/ImageCarousel'
 import VideoCarousel from '../../components/VideoCarousel'
 import CastCarousel from '../../components/CastCarousel'
-import { Genre, MediaDetailsType, SpokenLanguage } from '@/types/media'
+import {
+  Genre,
+  MediaCardType,
+  MediaDetailsType,
+  SpokenLanguage
+} from '@/types/media'
 import ListButton from '../../components/ListButton'
 import SeasonCarousel from '../../components/SeasonCarousel'
 import ErrorComponent from '@/components/error'
+import { apiGetSimilarContent } from '@/services/recommendation'
 
 export const generateMetadata = async ({
   params
@@ -34,6 +40,8 @@ export default async function TVShowDetails ({
 }) {
   const apiResponse = await apiGetTVShowDetails(params.id)
   const serie = apiResponse.data
+  const recommendResponse = await apiGetSimilarContent('tv', params.id)
+  const recommendedContent = recommendResponse.data
   if (serie.success == false) {
     return <ErrorComponent text='Error: Serie no encontrada' />
   }
@@ -263,6 +271,22 @@ export default async function TVShowDetails ({
               <CastCarousel
                 cast={serie.credits.cast.concat(serie.credits.crew)}
               />
+            </div>
+          </div>
+          <div>
+            <h3 className='text-2xl font-semibold mb-3'>
+              PRUEBAAAAAAAAAAAAAAAAAAAAAAAAAA
+            </h3>
+            <div className=' mt-5 flex flex-wrap gap-3'>
+              {recommendedContent.map((item: MediaCardType) => (
+                <Image
+                  className={`transition duration-200 rounded-sm h-full`}
+                  src={getImagePath(false, item.poster_path)}
+                  alt={(item.name as string) || (item.title as string)}
+                  width={150}
+                  height={750}
+                />
+              ))}
             </div>
           </div>
         </div>
