@@ -3,6 +3,7 @@ import { MediaType, SortType, MediaCardType } from '@/types/media'
 import { apiBase } from '@/lib/exports'
 
 import axiosRetry from 'axios-retry'
+import { UserRecommendation } from '@/types/user'
 
 axiosRetry(axios, {
   retries: 3,
@@ -29,6 +30,20 @@ export const apiGetSimilarContent = async (
     return res
   } catch (error) {
     console.error('Error al obtener la lista de contenido similar: ', error)
+    throw error
+  }
+}
+
+export const apiGetRecommendedContent = async (
+  userId: string
+): Promise<AxiosResponse<UserRecommendation[]>> => {
+  try {
+    const res = await axios.get<UserRecommendation[]>(
+      `${apiBase}/recommend/recommendations/${userId}`
+    )
+    return res
+  } catch (error) {
+    console.error('Error al obtener la lista de contenido recomendado: ', error)
     throw error
   }
 }

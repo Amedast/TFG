@@ -205,6 +205,14 @@ export default function HeaderMobile () {
                 <>
                   <Link
                     prefetch={false}
+                    href={'/recommendation'}
+                    onClick={() => setMenu(false)}
+                  >
+                    <div className='mx-5 my-4'>Recomendación</div>
+                  </Link>
+                  <Separator />
+                  <Link
+                    prefetch={false}
                     href={'/profile/list'}
                     onClick={() => setMenu(false)}
                   >

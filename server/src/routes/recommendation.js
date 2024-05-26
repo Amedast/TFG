@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
+import { UserModel } from "../models/User.js";
 dotenv.config();
 
 const router = express.Router();
@@ -113,6 +114,57 @@ router.get("/similar/:type/:id", async (req, res) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).send("Error al obtener contenidos similares.");
+	}
+});
+
+const getRecommendationsFromList = async (list) => {
+	const getRandomContents = (list, n) => {
+		const shuffled = list.sort(() => 0.5 - Math.random());
+		return shuffled.slice(0, n);
+	};
+
+	const randomContents = getRandomContents(list, 3);
+	let allRecommendations = [];
+
+	for (const listItem of randomContents) {
+		const contentDetails = await getContentDetails(
+			listItem.content.contentId,
+			listItem.content.mediaType
+		);
+		const recommendations = await getSimilarContent(
+			contentDetails,
+			listItem.content.mediaType
+		);
+		allRecommendations.push({
+			listItem: listItem,
+			recommendations: recommendations
+				.filter(
+					(rec) => !list.some((item) => item.content.contentId === rec.id)
+				)
+				.slice(0, 10),
+		});
+	}
+
+	return allRecommendations;
+};
+
+router.get("/recommendations/:userId", async (req, res) => {
+	const userId = req.params.userId;
+	const user = await UserModel.findById(userId);
+	if (!user) {
+		return res.status(404).json({
+			error: "USER_NOT_FOUND",
+			message: "Usuario no encontrado",
+		});
+	}
+	try {
+		const recommendations = await getRecommendationsFromList(
+			user.mediaList.list
+		);
+		res.json(recommendations);
+	} catch (error) {
+		console.error(error);
+		res.status(500).send("Error al obtener recomendaciones.");
 	}
 });
 

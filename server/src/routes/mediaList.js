@@ -232,4 +232,5 @@ router.get("/get/:userId", async (req, res) => {
 		res.status(500).json({ error: "SERVER_ERROR", message: error.message });
 	}
 });
+
 export { router as mediaRouter };

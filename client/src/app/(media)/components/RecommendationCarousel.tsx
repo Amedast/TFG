@@ -20,17 +20,9 @@ export default function RecommendationCarousel ({
       <Carousel>
         <CarouselContent>
           {media.map((med: MediaCardType) => (
-            <>
-              <CarouselItem key={med.id} className='basis-1/5'>
-                <RecommendationCard item={med} />
-              </CarouselItem>
-              <a
-                className='text-xl text-white'
-                href={getUrlByType('movie') + '' + med.id}
-              >
-                Aqui
-              </a>
-            </>
+            <CarouselItem key={med.id} className='basis-1/2 sm:basis-1/5'>
+              <RecommendationCard item={med} />
+            </CarouselItem>
           ))}
         </CarouselContent>
         <CarouselPrevious />
