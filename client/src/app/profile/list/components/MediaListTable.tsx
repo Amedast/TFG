@@ -115,7 +115,7 @@ export default function MediaListTable ({
               </TableCell>
               <TableCell>{parseTypeToText(item.status)}</TableCell>
               <TableCell className='hidden lg:table-cell '>
-                {item.progress}/{item.content.episodes}
+                {item.progress || 0}/{item.content.episodes}
               </TableCell>
               <TableCell className='font-bold text-amber-400 '>
                 <div className='flex items-center justify-center gap-1'>
