@@ -80,7 +80,7 @@ export default function Header () {
           {isLoggedIn && (
             <DesktopHeaderItem
               key={'Recommendation'}
-              title={'Recomendación'}
+              title={'Descubre'}
               popover={false}
               popoverItems={[]}
               url={'/recommendation'}

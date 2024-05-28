@@ -41,7 +41,7 @@ export const HeaderItems = [
     ]
   },
   {
-    title: 'Descubre',
+    title: 'Explora',
     popover: false,
     popoverItems: [],
     url: '/filter'

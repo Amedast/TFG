@@ -208,7 +208,7 @@ export default function HeaderMobile () {
                     href={'/recommendation'}
                     onClick={() => setMenu(false)}
                   >
-                    <div className='mx-5 my-4'>Recomendación</div>
+                    <div className='mx-5 my-4'>Descubre</div>
                   </Link>
                   <Separator />
                   <Link
