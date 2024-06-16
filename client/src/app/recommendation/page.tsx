@@ -69,7 +69,12 @@ export default function Recommendation () {
         </div>
       ) : (
         <div className='flex flex-1 flex-col gap-5'>
-          {recommendations &&
+          {recommendations && recommendations.length === 0 ? (
+            <div className='text-lg xl:text-2xl mb-3 text-center font-bold'>
+              Añade algun contenido a tu lista para poder empezar a ver
+              recomendaciones
+            </div>
+          ) : (
             recommendations.map(recommendation => (
               <div key={recommendation.listItem.content.contentId}>
                 <div className='text-lg xl:text-2xl mb-3'>
@@ -82,7 +87,8 @@ export default function Recommendation () {
                   media={recommendation.recommendations}
                 />
               </div>
-            ))}
+            ))
+          )}
         </div>
       )}
     </div>

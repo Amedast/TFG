@@ -120,7 +120,7 @@ export const apiGetSearchContent = (
     )
     return res
   } catch (error) {
-    console.error('Error al hacer la busqueda del conteniddod: ', error)
+    console.error('Error al hacer la busqueda del contenido: ', error)
     throw error
   }
 }

@@ -119,7 +119,8 @@ router.get("/similar/:type/:id", async (req, res) => {
 
 const getRecommendationsFromList = async (list) => {
 	const getRandomContents = (list, n) => {
-		const shuffled = list.sort(() => 0.5 - Math.random());
+		const completedContent = list.filter((item) => item.status == 2);
+		const shuffled = completedContent.sort(() => 0.5 - Math.random());
 		return shuffled.slice(0, n);
 	};
 
