@@ -42,7 +42,7 @@ export default function DesktopHeaderItem ({
           </PopoverTrigger>
           <PopoverContent className='w-fit p-2.5 select-none'>
             {popoverItems.map(item => (
-              <Link key={item.url} href={item.url} prefetch={false}>
+              <Link key={item.url} href={item.url}>
                 <div
                   key={item.label}
                   className='p-2.5 hover:bg-secondary/80 transition duration-200 mb-0.5 rounded-sm'
@@ -54,7 +54,7 @@ export default function DesktopHeaderItem ({
           </PopoverContent>
         </Popover>
       ) : (
-        <Link href={url as string} prefetch={false}>
+        <Link href={url as string}>
           <div className='flex gap-1 justify-center items-center hover:bg-secondary/60 transition duration-200 p-2.5 rounded-sm '>
             {title}
           </div>

@@ -82,7 +82,6 @@ export default function MediaListTable ({
             <TableRow key={index} className='group'>
               <TableCell className='hidden sm:table-cell '>
                 <Link
-                  prefetch={false}
                   href={
                     getUrlByType(item.content.mediaType) +
                     item.content.contentId
@@ -100,7 +99,6 @@ export default function MediaListTable ({
               <TableCell className='font-medium truncate text-start'>
                 <div className='w-40 hover:underline transition-all duration-200'>
                   <Link
-                    prefetch={false}
                     href={
                       getUrlByType(item.content.mediaType) +
                       item.content.contentId

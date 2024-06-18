@@ -15,9 +15,7 @@ export default function ErrorComponent ({ text }: { text: string }) {
         </div>
         <div className='text-center text-3xl font-bold'>{text}</div>
         <div className='text-center text-primary text-2xl font-semibold'>
-          <Link prefetch={false} href={'/'}>
-            Volver al Inicio
-          </Link>
+          <Link href={'/'}>Volver al Inicio</Link>
         </div>
       </div>
     </div>
